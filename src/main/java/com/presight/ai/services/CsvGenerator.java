@@ -101,7 +101,10 @@ public class CsvGenerator {
             person.setPersonMetaData(personMetaData);
         }
 
-        writerCsv(Arrays.asList(phoneToPeopleMap.values().toArray()), PEOPLE_CSV_FILE);
+        Set<Person> personSet = new HashSet<>(phoneToPeopleMap.values());
+        List<Person> personList = new ArrayList<>(personSet);
+        Collections.sort(personList, Comparator.comparing(Person::getIdentificationNum));
+        writerCsv(personList, PEOPLE_CSV_FILE);
         return phoneToPeopleMap.keySet();
     }
 
