@@ -41,7 +41,7 @@ public class CsvGenerator {
         }
 
         List<Call> callSet = new ArrayList<>();
-        while (callSet.size() < Config.totalCalls) {
+        for (int i = 0; i < Config.totalCalls; i++) {
             int srcIndex = random.nextInt(indexToPhoneMap.size());
             String sourcePhone = indexToPhoneMap.get(srcIndex);
             //replace last with src to avoid calling from same source/des
