@@ -49,7 +49,7 @@ public class CsvGenerator {
             indexToPhoneMap.replace(indexToPhoneMap.size() - 1, sourcePhone);
 
             int callsForEachPhone = getRandom(1, Config.maxCallsForEachPhone + 1);
-            for (int j = 0; j < callsForEachPhone; j++) {
+            for (int j = 0; j < callsForEachPhone && callSet.size() < Config.totalCalls; j++) {
                 int desIndex = random.nextInt(indexToPhoneMap.size() - 1);
                 String desPhone = indexToPhoneMap.get(desIndex);
                 Call call = new Call(sourcePhone, desPhone);
@@ -58,8 +58,6 @@ public class CsvGenerator {
                 call.setCalTime(getRandom(Config.callTimeSince, LocalDateTime.now(ZoneOffset.UTC)));
                 call.setCallDuration(Duration.ofSeconds(getRandom(1, ((int) Config.maxCallDuration.getSeconds()) + 1)));
                 callSet.add(call);
-                if (callSet.size() == Config.totalCalls)
-                    break;
             }
         }
 
@@ -126,7 +124,7 @@ public class CsvGenerator {
     private static String generateName() {
         StringBuilder name = new StringBuilder();
         int nameLength = getRandom(1, Config.maxCharNum + 1);
-        for (int i = 0; i <= nameLength; i++) {
+        for (int i = 0; i < nameLength; i++) {
             name.append(charArray[random.nextInt(charArray.length - 1)]);
         }
         return name.toString();
