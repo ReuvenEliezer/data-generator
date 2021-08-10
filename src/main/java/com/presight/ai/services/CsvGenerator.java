@@ -35,21 +35,23 @@ public class CsvGenerator {
     }
 
     private static void generateCalls(Set<String> phones) {
-        List<String> phoneList = new ArrayList<>(phones);
+        Map<Integer, String> indexToPhoneMap = new HashMap<>();
+        for (String phone : phones) {
+            indexToPhoneMap.put(indexToPhoneMap.size(), phone);
+        }
+
         List<Call> callSet = new ArrayList<>();
         while (callSet.size() < Config.totalCalls) {
-            int srcIndex = random.nextInt(phoneList.size());
-            String sourcePhone = phoneList.get(srcIndex);
-
+            int srcIndex = random.nextInt(indexToPhoneMap.size());
+            String sourcePhone = indexToPhoneMap.get(srcIndex);
             //replace last with src to avoid calling from same source/des
-            String toReplace = phoneList.get(phoneList.size() - 1);
-            phoneList.add(srcIndex, toReplace);
-            phoneList.add(phoneList.size() - 1, sourcePhone);
+            indexToPhoneMap.replace(srcIndex, indexToPhoneMap.get(indexToPhoneMap.size() - 1));
+            indexToPhoneMap.replace(indexToPhoneMap.size() - 1, sourcePhone);
 
             int callsForEachPhone = getRandom(1, Config.maxCallsForEachPhone + 1);
             for (int j = 0; j < callsForEachPhone; j++) {
-                int desIndex = random.nextInt(phoneList.size() - 1);
-                String desPhone = phoneList.get(desIndex);
+                int desIndex = random.nextInt(indexToPhoneMap.size() - 1);
+                String desPhone = indexToPhoneMap.get(desIndex);
                 Call call = new Call(sourcePhone, desPhone);
                 call.setRegineFrom(randomEnum(RegineTypeEnum.class));
                 call.setRegineTo(randomEnum(RegineTypeEnum.class));
@@ -74,25 +76,6 @@ public class CsvGenerator {
         Duration between = Duration.between(from, to);
         int randomSec = getRandom(1, ((int) between.getSeconds()) + 1);
         return LocalDateTime.from(from).plus(Duration.ofSeconds(randomSec));
-    }
-
-    private static void randomOnMap(Set<String> phones) {
-        int mapSize = 10;
-        List<String> phoneList = new ArrayList<>(phones);
-        Map<Integer, String> map = new HashMap<>();
-        for (int i = 0; i < mapSize; i++) {
-            map.put(i, phoneList.get(i));
-        }
-
-        int size = map.size();
-
-        for (int i = 0; i < size; i++) {
-            int currentMapSize = map.size();
-            int r = random.nextInt(currentMapSize - i);
-            String value = map.get(r);
-            System.out.println(value);
-            map.replace(r, map.get(currentMapSize - (i + 1)));
-        }
     }
 
     private static Set<String> generatePersons() {
@@ -141,12 +124,12 @@ public class CsvGenerator {
     }
 
     private static String generateName() {
-        StringBuilder firstName = new StringBuilder();
+        StringBuilder name = new StringBuilder();
         int nameLength = getRandom(1, Config.maxCharNum + 1);
         for (int i = 0; i <= nameLength; i++) {
-            firstName.append(charArray[random.nextInt(charArray.length - 1)]);
+            name.append(charArray[random.nextInt(charArray.length - 1)]);
         }
-        return firstName.toString();
+        return name.toString();
     }
 
     private static String generatePhoneNum() {
