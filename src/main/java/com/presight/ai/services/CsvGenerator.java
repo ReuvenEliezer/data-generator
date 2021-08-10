@@ -18,6 +18,7 @@ import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class CsvGenerator {
 
@@ -61,8 +62,7 @@ public class CsvGenerator {
             }
         }
 
-        Collections.sort(callSet, Comparator.comparing(Call::getCalTime));
-        writerCsv(Arrays.asList(callSet.toArray()), CALLS_CSV_FILE);
+        writerCsv(callSet.stream().sorted(Comparator.comparing(Call::getCalTime)), CALLS_CSV_FILE);
     }
 
     private static <T extends Enum> T randomEnum(Class<T> clazz) {
@@ -101,20 +101,17 @@ public class CsvGenerator {
             person.setPersonMetaData(personMetaData);
         }
 
-        Set<Person> personSet = new HashSet<>(phoneToPeopleMap.values());
-        List<Person> personList = new ArrayList<>(personSet);
-        Collections.sort(personList, Comparator.comparing(Person::getIdentificationNum));
-        writerCsv(personList, PEOPLE_CSV_FILE);
+        writerCsv(phoneToPeopleMap.values().stream().distinct().sorted(Comparator.comparing(Person::getIdentificationNum)), PEOPLE_CSV_FILE);
         return phoneToPeopleMap.keySet();
     }
 
-    private static <T> void writerCsv(List<T> personList, String csvFileName) {
+    private static <T> void writerCsv(Stream<T> stream, String csvFileName) {
         try (Writer writer = Files.newBufferedWriter(Paths.get(csvFileName))) {
             StatefulBeanToCsv beanToCsv = new StatefulBeanToCsvBuilder(writer)
                     .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
                     .build();
 
-            beanToCsv.write(personList);
+            beanToCsv.write(stream);
         } catch (IOException | CsvRequiredFieldEmptyException | CsvDataTypeMismatchException e) {
             e.printStackTrace();
         }
