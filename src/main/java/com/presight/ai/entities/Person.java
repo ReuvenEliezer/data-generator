@@ -18,7 +18,7 @@ import java.util.Set;
 public class Person {
 
     /**
-     * ​people:
+     *:
      * - first name
      * - last name
      * - identical id
@@ -40,7 +40,7 @@ public class Person {
     private String lastName;
 
     @Setter(AccessLevel.NONE)
-    @CsvBindAndSplitByName(column = "Phone List", elementType = String.class, writeDelimiter = " ")
+    @CsvBindAndSplitByName(column = "Phone List", elementType = String.class, writeDelimiter = ",")
     //https://stackoverflow.com/questions/62841670/opencsv-how-to-write-into-csv-with-custom-processing
     private Set<String> phoneNumList;
 

@@ -107,8 +107,8 @@ public class CsvGenerator {
 
     private static <T> void writerCsv(Stream<T> stream, String csvFileName) {
         try (Writer writer = Files.newBufferedWriter(Paths.get(csvFileName))) {
-            StatefulBeanToCsv beanToCsv = new StatefulBeanToCsvBuilder(writer)
-                    .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
+            StatefulBeanToCsv<T> beanToCsv = new StatefulBeanToCsvBuilder<T>(writer)
+                    .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
                     .build();
 
             beanToCsv.write(stream);
