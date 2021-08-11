@@ -25,7 +25,7 @@ public class CsvGenerator {
     private static final String CALLS_CSV_FILE = "./calls.csv";
     private static final String PEOPLE_CSV_FILE = "./people.csv";
 
-    private static Random random = new Random();
+    private static final Random random = new Random();
     private static final char[] charArray = IntStream.rangeClosed('a', 'z')
             .mapToObj(c -> "" + (char) c)
             .collect(Collectors.joining()).toCharArray();
