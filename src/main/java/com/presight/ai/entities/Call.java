@@ -3,6 +3,7 @@ package com.presight.ai.entities;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvDate;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.Duration;
@@ -12,6 +13,7 @@ import java.util.Objects;
 
 @Data
 @ToString
+@NoArgsConstructor //for serializer
 public class Call {
     /**
      * phone

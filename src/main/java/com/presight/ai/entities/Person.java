@@ -1,13 +1,7 @@
 package com.presight.ai.entities;
 
-import com.opencsv.bean.CsvBindAndSplitByName;
-import com.opencsv.bean.CsvBindAndSplitByNames;
-import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvBindByPosition;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Setter;
-import lombok.ToString;
+import com.opencsv.bean.*;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -15,6 +9,7 @@ import java.util.Set;
 
 @Data
 @ToString
+@NoArgsConstructor //for serializer
 public class Person {
 
     /**
