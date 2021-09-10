@@ -7,7 +7,7 @@ import java.util.Date;
 public class Config {
 
     //person config
-    public static int totalPersons = 20;
+    public static int totalPersons = 5;
     public static int maxCharNum = 10;
     public static int maxPhonesForEachPerson = 3;
     public static int phoneDigits = 12;
@@ -15,8 +15,8 @@ public class Config {
     public static int minHeightInSm = 10;
 
     //calls config
-    public static int totalCalls = 100;
-    public static int maxCallsForEachPhone = 10;
+    public static int totalCalls = 10;
+    public static int maxCallsForEachPhone = 1;
     public static Duration maxCallDuration = Duration.ofHours(2);
     public static LocalDateTime callTimeSince = LocalDateTime.of(2019, 1, 1, 00, 00).atZone(ZoneOffset.UTC).toLocalDateTime();
 

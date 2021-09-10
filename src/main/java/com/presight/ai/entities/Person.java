@@ -35,9 +35,9 @@ public class Person {
     private String lastName;
 
     @Setter(AccessLevel.NONE)
-    @CsvBindAndSplitByName(column = "Phone List", elementType = String.class, writeDelimiter = ",")
+    @CsvBindAndSplitByName(column = "Phone Owner List", elementType = PhoneOwner.class, writeDelimiter = ",")
     //https://stackoverflow.com/questions/62841670/opencsv-how-to-write-into-csv-with-custom-processing
-    private Set<String> phoneNumList;
+    private Set<PhoneOwner> phoneNumList;
 
     @CsvBindByName(column = "Gender")
     private GenderTypeEnum genderTypeEnum;
@@ -54,8 +54,8 @@ public class Person {
         this.phoneNumList = new HashSet<>();
     }
 
-    public void addPhone(String phoneNum) {
-        phoneNumList.add(phoneNum);
+    public void addPhone(PhoneOwner phoneOwner) {
+        phoneNumList.add(phoneOwner);
     }
 
     @Override

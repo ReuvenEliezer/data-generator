@@ -1,5 +1,8 @@
 package com.presight.ai.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
@@ -26,11 +29,19 @@ public class CsvGenerator {
     private static final String PEOPLE_CSV_FILE = "./people.csv";
 
     private static final Random random = new Random();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
     private static final char[] charArray = IntStream.rangeClosed('a', 'z')
             .mapToObj(c -> "" + (char) c)
             .collect(Collectors.joining()).toCharArray();
 
+    public CsvGenerator() {
+    }
+
     public static void generate() {
+        //https://stackoverflow.com/questions/27952472/serialize-deserialize-java-8-java-time-with-jackson-json-mapper
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        objectMapper.findAndRegisterModules();
         Set<String> phones = generatePersons();
         generateCalls(phones);
     }
@@ -84,11 +95,12 @@ public class CsvGenerator {
             person.setFirstName(generateName());
             person.setLastName(generateName());
 
-            int phoneNum = getRandom(1, Config.maxPhonesForEachPerson + 1);
-            for (int j = 0; j < phoneNum; j++) {
-                String phone = generatePhoneNum();
-                person.addPhone(phone);
-                phoneToPeopleMap.put(phone, person);
+            int totalPhones = getRandom(1, Config.maxPhonesForEachPerson + 1);
+            for (int j = 0; j < totalPhones; j++) {
+                String phoneNum = generatePhoneNum();
+                PhoneOwner phoneOwner = new PhoneOwner(phoneNum);
+                person.addPhone(phoneOwner);
+                phoneToPeopleMap.put(phoneNum, person);
             }
 
             person.setGenderTypeEnum(randomEnum(GenderTypeEnum.class));
@@ -98,6 +110,13 @@ public class CsvGenerator {
             personMetaData.setHeight(getRandom(Config.minHeightInSm, Config.maxHeightInSm + 1));
             personMetaData.setEyeColor(randomEnum(ColorEnum.class));
             personMetaData.setHairColor(randomEnum(ColorEnum.class));
+//            try {
+//                String s = objectMapper.writeValueAsString(person);
+//                Person person1 = objectMapper.readValue(s, Person.class);
+//                int d=0;
+//            } catch (JsonProcessingException e) {
+//                e.printStackTrace();
+//            }
             person.setPersonMetaData(personMetaData);
         }
 
